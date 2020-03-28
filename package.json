@@ -1,0 +1,49 @@
+{
+  "name": "react-app-template",
+  "version": "0.0.1",
+  "description": "A boilerplate for creating a production-ready react application.",
+  "scripts": {
+    "start": "cross-env RAZZLE_CLIENT_ENTRY_POINT=src/common/renderers/domRenderer.js razzle start",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom",
+    "prod-start": "cross-env NODE_ENV=production NODE_PATH=./build pm2 start -i max build/server/server.js --update-env --name app",
+    "prod-stop": "pm2 stop app",
+    "prod-reload": "pm2 reload --update-env app",
+    "prod-logs": "pm2 logs --update-env app",
+    "eslint": "eslint \"src/**/*.js\" --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ollyrowe/react-app-template"
+  },
+  "author": "Olly Rowe",
+  "license": "MIT",
+  "homepage": "https://github.com/ollyrowe/react-app-template",
+  "dependencies": {
+    "@material-ui/core": "^4.9.7",
+    "@material-ui/icons": "^4.9.1",
+    "axios": "^0.19.2",
+    "babel-plugin-import": "^1.13.0",
+    "cookie-parser": "^1.4.5",
+    "cross-env": "^7.0.2",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-useragent": "^1.0.13",
+    "pm2": "^4.2.3",
+    "razzle": "3.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.1",
+    "prettier": "^1.19.1"
+  }
+}
