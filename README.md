@@ -4,7 +4,7 @@ The react-app-template repository is a subjective boilerplate for quickly gettin
 
 ## Getting Started
 
-To get started, simply fork this repository and following the steps below.
+To get started, simply click 'Use this template' or fork this repository and following the steps below.
 
 ## Installation
 
