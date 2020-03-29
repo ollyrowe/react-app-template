@@ -1,6 +1,7 @@
 import path from 'path';
 import express from 'express';
-import userAgent from 'express-useragent';
+import helmet from 'helmet';
+import useragent from 'express-useragent';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import serialize from 'serialize-javascript';
@@ -11,57 +12,49 @@ import { routes } from '../common/routes';
 // Import API routes
 import apiRoutes from './api/routes';
 
-const pageRoutes = routes.map(route => route.path);
-pageRoutes.push('/');
-
 // Initialise the express server
 const server = express();
 
-// Enables reverse proxy support
-server.enable('trust proxy');
-// Set the view engine to Embedded JavaScript
-server.set('view engine', 'ejs');
-// Disable X-Powered-By header
-server.disable('x-powered-by');
+// Middleware which sets various headers to better secure the server
+server.use(helmet());
 
-// Middleware to read POST data
+// Enables reverse proxy support from loopback
+server.enable('trust proxy', 'loopback');
+
+// Middleware to parse and validate request body
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
-// Middleware to read request cookies
+// Middleware to parse request cookies
 server.use(cookieParser());
 // Middleware to parse user-agent header
-server.use(parseUserAgent);
+server.use(useragent.express());
 
-// Set the views directory
+// Set the view engine to Embedded JavaScript
+server.set('view engine', 'ejs');
+// Set the views directory to ./src/server/views
 server.set('views', path.join(__dirname, '../src/server/views'));
 
-// Catch any errors
-server.use((error, req, res, next) => {
-  // If a malformed request causes a syntax error, respond with bad request
-  if (error instanceof SyntaxError) {
-    res.status(400).send('There was an error in the syntax of the request');
-  } else {
-    next();
-  }
-});
-
-// Server static file from the location specified by razzle variable
-server.use(express.static(process.env.RAZZLE_PUBLIC_DIR));
-
-// Serve static files from ./public/static
-server.use(express.static('./public/static'));
-
-// Superset of JSON that includes regular expressions, dates and functions
+/**
+ * Used to parse JSON within rendering of views.
+ * It's a superset of JSON that includes regex, dates and functions.
+ * Also provides escaping of HTML characters to mitigate risk of XSS
+ */
 server.locals.serialize = serialize;
 
-// Use the API routes
+// Server static files from the location specified by razzle variable
+server.use(express.static(process.env.RAZZLE_PUBLIC_DIR));
+
+// Use the API routes for any requests starting within /api/v1
 server.use('/api/v1', apiRoutes);
 
-// Route direct page requests
-server.get(pageRoutes, ssrHandler);
+// Route direct page requests to the ssrHandler
+server.get(
+  routes.map(route => route.path),
+  ssrHandler
+);
 
-// Upon request, render and respond with index.ejs
-server.get('*', async (req, res) => {
+// Catch all requests that have not yet been handled
+server.get('*', (req, res) => {
   /*
    * If the request is only requesting a resource directly from root
    * e.g. /PageName, /Resource, then pass request to ssrHandler for defualt routing
@@ -75,6 +68,10 @@ server.get('*', async (req, res) => {
   }
 });
 
+// Catch all unhandled errors
+server.use(errorHandler);
+
+// Handle the server-side rendering of the application
 function ssrHandler(req, res) {
   try {
     // Fetch the inital data and markup
@@ -89,11 +86,9 @@ function ssrHandler(req, res) {
   }
 }
 
-/**
- * Parse the user-agent header into more usable properties.
- */
-function parseUserAgent(req, res, next) {
-  req.userAgent = userAgent.parse(req.headers['user-agent']);
+// Handle any un-caught errors
+function errorHandler(err, req, res, next) {
+  res.sendStatus(500);
   next();
 }
 

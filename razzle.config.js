@@ -21,13 +21,11 @@ const razzleCustomEntryPoint = (config, env) => {
 
   // Client Web Server
   if (target === 'web' && clientEntryPoint) {
-    // client only
     config.entry.client[1] = path.join(__dirname, clientEntryPoint);
   }
 
   // Node Server
   if (target === 'node' && serverEntryPoint) {
-    // server only
     config.entry[2] = path.join(__dirname, serverEntryPoint);
   }
 
