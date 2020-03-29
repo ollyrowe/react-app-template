@@ -9,7 +9,6 @@
     "prod-start": "cross-env NODE_ENV=production NODE_PATH=./build pm2 start -i max build/server/server.js --update-env --name app",
     "prod-stop": "pm2 stop app",
     "prod-reload": "pm2 reload --update-env app",
-    "prod-logs": "pm2 logs --update-env app",
     "eslint": "eslint \"src/**/*.js\" --fix"
   },
   "repository": {

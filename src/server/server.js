@@ -13,48 +13,48 @@ import { routes } from '../common/routes';
 import apiRoutes from './api/routes';
 
 // Initialise the express server
-const server = express();
+const app = express();
 
 // Middleware which sets various headers to better secure the server
-server.use(helmet());
+app.use(helmet());
 
 // Enables reverse proxy support from loopback
-server.enable('trust proxy', 'loopback');
+app.enable('trust proxy', 'loopback');
 
 // Middleware to parse and validate request body
-server.use(bodyParser.urlencoded({ extended: false }));
-server.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 // Middleware to parse request cookies
-server.use(cookieParser());
+app.use(cookieParser());
 // Middleware to parse user-agent header
-server.use(useragent.express());
+app.use(useragent.express());
 
 // Set the view engine to Embedded JavaScript
-server.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 // Set the views directory to ./src/server/views
-server.set('views', path.join(__dirname, '../src/server/views'));
+app.set('views', path.join(__dirname, '../src/server/views'));
 
 /**
  * Used to parse JSON within rendering of views.
  * It's a superset of JSON that includes regex, dates and functions.
  * Also provides escaping of HTML characters to mitigate risk of XSS
  */
-server.locals.serialize = serialize;
+app.locals.serialize = serialize;
 
 // Server static files from the location specified by razzle variable
-server.use(express.static(process.env.RAZZLE_PUBLIC_DIR));
+app.use(express.static(process.env.RAZZLE_PUBLIC_DIR));
 
 // Use the API routes for any requests starting within /api/v1
-server.use('/api/v1', apiRoutes);
+app.use('/api/v1', apiRoutes);
 
 // Route direct page requests to the ssrHandler
-server.get(
+app.get(
   routes.map(route => route.path),
   ssrHandler
 );
 
 // Catch all requests that have not yet been handled
-server.get('*', (req, res) => {
+app.get('*', (req, res) => {
   /*
    * If the request is only requesting a resource directly from root
    * e.g. /PageName, /Resource, then pass request to ssrHandler for defualt routing
@@ -69,27 +69,26 @@ server.get('*', (req, res) => {
 });
 
 // Catch all unhandled errors
-server.use(errorHandler);
+app.use(errorHandler);
 
 // Handle the server-side rendering of the application
 function ssrHandler(req, res) {
-  try {
-    // Fetch the inital data and markup
-    const vars = serverRenderer(req, res);
-    // Render index.ejs using the specified vars and send the HTML to client
-    res.render('index', vars);
-  } catch (err) {
-    // Log error to console
-    console.error(err);
-    // Respond with server error
-    res.status(500).send('Server error');
-  }
+  // Fetch the inital data and markup
+  const vars = serverRenderer(req, res);
+  // Render index.ejs using the specified vars and send the HTML to client
+  res.render('index', vars);
 }
 
 // Handle any un-caught errors
 function errorHandler(err, req, res, next) {
-  res.sendStatus(500);
+  // Check if headers haven't yet been sent
+  if (!res.headersSent) {
+    // Respond with server error
+    res.sendStatus(500);
+  }
+  // Log the error to console
+  console.error(err);
   next();
 }
 
-export default server;
+export default app;

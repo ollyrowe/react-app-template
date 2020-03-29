@@ -41,11 +41,10 @@ $ npm run build
 $ npm run prod-start
 ```
 
-To reload, view logs or stop the production building.
+To reload or stop the production building.
 
 ```
 $ npm run prod-reload
-$ npm run prod-logs
 $ npm run prod-stop
 ```
 
@@ -65,7 +64,7 @@ Razzles' configurations can be easily customized to suit your needs through the 
 
 [PM2](https://www.npmjs.com/package/pm2) is a production process manager for Node.js applications with a built-in load balancer. It allows you to keep applications alive forever, to reload them without downtime and to facilitate common system admin tasks.
 
-I have added a set of production scripts within package.json to start, stop, reload and to view logs for the production build of the application.
+I have added a set of production scripts within package.json to start, stop and reload the production build of the application.
 
 ### Eslint & Prettier
 

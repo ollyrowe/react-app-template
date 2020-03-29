@@ -7,13 +7,12 @@ import socket from 'socket.io';
 /**
  * Initialises socket.io server from a given http/https server instance.
  */
-export default function createSocketServer(server) {
+function socketServer(server) {
   // Initialise the socket.io server
   const io = socket(server);
 
   // Setup the socket.io connection endpoint
   io.on('connection', socket => {
-    // TODO
     // Recieve requests
     // socket.on('notification', (data) => {...}
     // Emit requests
@@ -23,3 +22,5 @@ export default function createSocketServer(server) {
   // Return the socket.io server instance
   return io;
 }
+
+export default socketServer;

@@ -12,7 +12,7 @@ function Main() {
   // The inital data
   const initialData = window.__R_DATA.initialData;
 
-  // Upon component mount, remove the inital server-side renderd css
+  // Upon component mount, remove the inital server-side rendered CSS
   useEffect(() => {
     const jssStyles = document.getElementById('jss-server-side');
     if (jssStyles) {

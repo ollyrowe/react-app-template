@@ -7,13 +7,12 @@ import { ThemeProvider, ServerStyleSheets } from '@material-ui/core/styles';
 import { App } from '../../client/App';
 // Import the App Data
 import appData from '../../common/appData';
-
 // Import the routes
 import { routes, defaultRoute } from '../../common/routes';
-
 // Import the theme
 import { theme } from '../../client/styles/theme';
 
+// Fetch URLs of any assets
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 function serverRenderer(req, res) {
