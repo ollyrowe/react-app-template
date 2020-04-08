@@ -75,8 +75,11 @@ app.use(errorHandler);
 function ssrHandler(req, res) {
   // Fetch the inital data and markup
   const vars = serverRenderer(req, res);
-  // Render index.ejs using the specified vars and send the HTML to client
-  res.render('index', vars);
+  // If the variables have been returned, indicating that the user hasn't been redirected
+  if (vars) {
+    // Render index.ejs using the specified vars and send the HTML to client
+    res.render('index', vars);
+  }
 }
 
 // Handle any un-caught errors

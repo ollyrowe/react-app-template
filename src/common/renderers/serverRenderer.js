@@ -24,7 +24,7 @@ function serverRenderer(req, res) {
 
   // Redirect the user to the default route if that have entered an invalid path
   if (!validPaths.includes(req.path)) {
-    res.redirect(defaultRoute.path);
+    return res.redirect(defaultRoute.path);
   }
 
   // The inital data
