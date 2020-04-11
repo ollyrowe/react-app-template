@@ -72,10 +72,6 @@ To ensure code quality and consistency, [Eslint](https://eslint.org/) & [Prettie
 
 I have also provided an Eslint script within package.json which will scan and fix, where possible, all .js files within the ./src folder.
 
-### cross-env
-
-Prefixing several scripts within package.json, the [cross-env](https://www.npmjs.com/package/cross-env) command provides a solution for passing environment variables into your scripts without the worry of what platform you are running it from - whether that be Linux, Windows, MacOS, etc.
-
 ## Authors
 
 - [Olly Rowe](https://github.com/ollyrowe/)

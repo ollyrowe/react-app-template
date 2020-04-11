@@ -17,16 +17,26 @@ const clientEntryPoint = process.env.RAZZLE_CLIENT_ENTRY_POINT;
 const serverEntryPoint = process.env.RAZZLE_SERVER_ENTRY_POINT;
 
 const razzleCustomEntryPoint = (config, env) => {
-  const { target } = env;
+  const { target, dev } = env;
 
   // Client Web Server
   if (target === 'web' && clientEntryPoint) {
-    config.entry.client[1] = path.join(__dirname, clientEntryPoint);
+    if (dev) {
+      config.entry.client[1] = path.join(__dirname, clientEntryPoint);
+    } else {
+      // Only one entry point for prod.
+      config.entry.client = path.join(__dirname, clientEntryPoint);
+    }
   }
 
   // Node Server
   if (target === 'node' && serverEntryPoint) {
-    config.entry[2] = path.join(__dirname, serverEntryPoint);
+    if (dev) {
+      config.entry[2] = path.join(__dirname, serverEntryPoint);
+    } else {
+      // Only one entry point for prod.
+      config.entry = path.join(__dirname, serverEntryPoint);
+    }
   }
 
   return config;

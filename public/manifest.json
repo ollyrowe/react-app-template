@@ -1,5 +1,6 @@
 {
   "short_name": "App",
   "name": "Application Name",
-  "static_url": "."
+  "static_url": ".",
+  "display": "standalone"
 }
