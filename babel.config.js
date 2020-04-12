@@ -15,6 +15,9 @@ module.exports = {
       }
     ]
   ],
+  // Enable tree shaking of Material UI modules for smaller bundle size in development.
+  // This allows for much shorter start up times when importing using top-level imports.
+  // For more information, see: https://material-ui.com/guides/minimizing-bundle-size/
   plugins: [
     '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-class-properties', { loose: true }],
@@ -22,7 +25,6 @@ module.exports = {
       'babel-plugin-import',
       {
         libraryName: '@material-ui/core',
-        // Use "'libraryDirectory': ''," if your bundler does not support ES modules
         libraryDirectory: '',
         camel2DashComponentName: false
       },
@@ -32,11 +34,19 @@ module.exports = {
       'babel-plugin-import',
       {
         libraryName: '@material-ui/icons',
-        // Use "'libraryDirectory': ''," if your bundler does not support ES modules
         libraryDirectory: '',
         camel2DashComponentName: false
       },
       'icons'
+    ],
+    [
+      'babel-plugin-import',
+      {
+        libraryName: '@material-ui/lab',
+        libraryDirectory: '',
+        camel2DashComponentName: false
+      },
+      'lab'
     ]
   ]
 };
