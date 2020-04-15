@@ -4,7 +4,7 @@ const path = require('path');
  * Custom Razzle plugin for custom entry points.
  *
  * Razzle currently hardcodes the following entry points:
- *      server: ./src/server.js
+ *      server: ./src/index.js
  *      client: ./src/client.js
  *
  * This plugin allows for you to specify these entry points through environment variables.
