@@ -6,7 +6,7 @@
     "start": "cross-env RAZZLE_CLIENT_ENTRY_POINT=src/common/renderers/domRenderer.js razzle start",
     "build": "cross-env RAZZLE_CLIENT_ENTRY_POINT=src/common/renderers/domRenderer.js razzle build",
     "test": "razzle test --env=jsdom",
-    "prod-start": "cross-env NODE_ENV=production NODE_PATH=./build pm2 start -i max build/server.js --update-env --name app",
+    "prod-start": "cross-env NODE_ENV=production NODE_PATH=./build pm2-runtime start -i max build/server.js --name app",
     "prod-stop": "pm2 stop app",
     "prod-reload": "pm2 reload --update-env app",
     "eslint": "eslint \"src/**/*.js\" --fix"
